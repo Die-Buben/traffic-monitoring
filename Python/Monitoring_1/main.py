@@ -7,14 +7,14 @@ tracker = EuclideanDistTracker()
 cap = cv2.VideoCapture("Sample_2_MP4.mp4")
 
 # Object detection from Stable camera
-object_detector = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=40)
+object_detector = cv2.createBackgroundSubtractorMOG2(history=250, varThreshold=150, detectShadows=True)
 
 while True:
     ret, frame = cap.read()
     height, width, _ = frame.shape
 
     # Extract Region of interest
-    roi = frame[100: 1000,100: 1000]
+    roi = frame[100: 1000, 500: 1500]
 
     # 1. Object Detection
     mask = object_detector.apply(roi)
@@ -24,10 +24,9 @@ while True:
     for cnt in contours:
         # Calculate area and remove small elements
         area = cv2.contourArea(cnt)
-        if area > 200:
-            #cv2.drawContours(roi, [cnt], -1, (0, 255, 0), 2)
+        if area > 35000:
+            cv2.drawContours(roi, [cnt], -1, (0, 255, 0), 2)
             x, y, w, h = cv2.boundingRect(cnt)
-
 
             detections.append([x, y, w, h])
 
@@ -39,8 +38,8 @@ while True:
         cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
     #cv2.imshow("roi", roi)
-    #cv2.imshow("Frame", frame)
-    cv2.imshow("Mask", mask)
+    cv2.imshow("Frame", frame)
+    #cv2.imshow("Mask", mask)
 
     key = cv2.waitKey(30)
     if key == 27:
