@@ -4,7 +4,7 @@ from tracker import *
 # Create tracker object
 tracker = EuclideanDistTracker()
 
-cap = cv2.VideoCapture("test.mp4")
+cap = cv2.VideoCapture("Sample_2_MP4.mp4")
 
 # Object detection from Stable camera
 object_detector = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=40)
@@ -39,7 +39,7 @@ while True:
         cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
     #cv2.imshow("roi", roi)
-    cv2.imshow("Frame", frame)
+    #cv2.imshow("Frame", frame)
     cv2.imshow("Mask", mask)
 
     key = cv2.waitKey(30)
