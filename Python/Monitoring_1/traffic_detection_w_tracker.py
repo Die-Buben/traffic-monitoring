@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
+from tracker import *
 
 capture = cv2.VideoCapture("car_bridge.mp4")
 objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=400, detectShadows=True)
 kernel = np.ones((5, 5), np.uint8)
-counter = 0
+tracker = EuclideanDistTracker()
 
 while True:
     _, frame = capture.read()
@@ -24,16 +25,17 @@ while True:
         hull = cv2.convexHull(contours2Iteration[i])
         cv2.drawContours(mask, [hull], -1, (255, 0, 0), -1)
 
-    cv2.line(regionOfInterest, (0, 200), (1100, 200), (0, 0, 255), 2)
+    #  cv2.line(regionOfInterest, (0, 200), (1100, 200), (0, 0, 255), 2)
 
     contours3Iteration, _ = cv2.findContours(mask, cv2.RETR_TREE,
                                              cv2.CHAIN_APPROX_NONE)  # get the new contours for detection
-
+    detections = []
     for cnt in contours3Iteration:
-        (x, y, w, h) = cv2.boundingRect(cnt)
-
-        if w > 50 and h > 50:
-            cv2.rectangle(regionOfInterest, (x, y), (x + w, y + h), (255, 0, 0), 1)
+        #  (x, y, w, h) = cv2.boundingRect(cnt)
+        area = cv2.contourArea(cnt)
+        if area > 10000:
+            (x, y, w, h) = cv2.boundingRect(cnt)
+            detections.append([x, y, w, h])
 
             x1 = w / 2
             y1 = h / 2
@@ -43,15 +45,16 @@ while True:
 
             centroid = (cx, cy)
             cv2.circle(regionOfInterest, (int(cx), int(cy)), 10, (0, 0, 255), -1)
-            if cy < 200 and cy > 170:
-                counter += 1
-                # https://www.semicolonworld.com/question/54759/counting-cars-opencv-python-issue
 
-            cv2.putText(regionOfInterest, str(counter), (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 2)
+    boxes_ids = tracker.update(detections)
+    for box_id in boxes_ids:
+        x, y, w, h, id = box_id
+        cv2.putText(regionOfInterest, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
+        cv2.rectangle(regionOfInterest, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
     cv2.imshow("roi", regionOfInterest)
     cv2.imshow("mask", mask)
-    # cv2.imshow("tt", dilated)
+
     key = cv2.waitKey(30)
     if key == 27:
         break
