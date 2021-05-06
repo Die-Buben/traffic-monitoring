@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+
+
 from tracker import *
 from userinterface import *
 
@@ -66,22 +68,3 @@ def track_vehicle(mask, regionOfInterest, tracker):
         x, y, w, h, id = box_id
         cv2.putText(regionOfInterest, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
         cv2.rectangle(regionOfInterest, (x, y), (x + w, y + h), (0, 255, 0), 3)
-
-
-'''
-while True:
-    _, frame = capture.read()
-    regionOfInterest = frame[125:, 250:1100]  # car_bridge.mp4  //height and width
-    mask = objectDetector.apply(regionOfInterest)
-    _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)  # remove grey elements from mask, like shadows
-
-    pre_processing()
-    track_vehicle()
-
-    cv2.imshow("Traffic Detection", regionOfInterest)
-    cv2.imshow("Mask after preprocessing", mask)
-
-    key = cv2.waitKey(30)
-    if key == 27:
-        break
-'''
