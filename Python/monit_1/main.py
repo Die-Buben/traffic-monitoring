@@ -1,7 +1,6 @@
-import userinterface
 from userinterface import *
 
-
 root = tk.Tk()
-app = Application(master=root)
+root.title('traffic-monitoring')
+app = Userinterface(root)
 app.mainloop()

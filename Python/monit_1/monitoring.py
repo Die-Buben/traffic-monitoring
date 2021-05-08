@@ -7,7 +7,9 @@ from userinterface import *
 
 
 def setup():
-    capture = cv2.VideoCapture("videoSamples/car_bridge.mp4")
+    #  capture = cv2.VideoCapture("videoSamples/car_bridge.mp4")
+    #  capture = cv2.VideoCapture(0) webcam
+    capture = cv2.VideoCapture("http://192.168.178.34:8080/video")
 
     objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=400, detectShadows=True)
     tracker = EuclideanDistTracker()
@@ -18,9 +20,11 @@ def setup():
 
 
 def monitoring(objectDetector, capture, tracker):
+    _, frame = capture.read()
+    r = cv2.selectROI(frame)
     while True:
         _, frame = capture.read()
-        regionOfInterest = frame[125:, 250:1100]  # car_bridge.mp4  //height and width
+        regionOfInterest = frame[int(r[1]):int(r[1] + r[3]), int(r[0]):int(r[0] + r[2])]
         mask = objectDetector.apply(regionOfInterest)
         _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)  # remove grey elements from mask, like shadows
 
@@ -51,7 +55,7 @@ def track_vehicle(mask, regionOfInterest, tracker):
     detections = []
     for cnt in contours:
         area = cv2.contourArea(cnt)
-        if area > 10000:
+        if area > 1000:
             (x, y, w, h) = cv2.boundingRect(cnt)
             detections.append([x, y, w, h])
 

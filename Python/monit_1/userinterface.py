@@ -2,14 +2,10 @@ import tkinter as tk
 import monitoring
 
 
-def start_monitoring():
-    monitoring.setup()
-
-
-class Application(tk.Frame):
+class Userinterface(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.master = master
+        #  self.master = master
         self.pack()
         self.create_widgets()
         self.create_text_view()
@@ -17,7 +13,7 @@ class Application(tk.Frame):
     def create_widgets(self):
         self.btn_monitoring = tk.Button(self)
         self.btn_monitoring["text"] = "Start the monitoring!"
-        self.btn_monitoring["command"] = start_monitoring
+        self.btn_monitoring["command"] = self.start_monitoring
         self.btn_monitoring.pack(side="top")
 
         self.quit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
@@ -33,3 +29,6 @@ class Application(tk.Frame):
 
     def update_car_amount(self, car_amount="HA"):
         self.display.configure(text=car_amount)
+
+    def start_monitoring(self):
+        monitoring.setup()
