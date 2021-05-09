@@ -1,4 +1,4 @@
-from userinterface import *
+from Userinterface import *
 
 root = tk.Tk()
 root.title('traffic-monitoring')

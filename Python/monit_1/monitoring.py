@@ -2,14 +2,17 @@ import cv2
 import numpy as np
 
 
-from tracker import *
-from userinterface import *
+from EuclideanDistanceTracker import *
+from Userinterface import *
 
 
 def setup():
-    #  capture = cv2.VideoCapture("videoSamples/car_bridge.mp4")
+    capture = cv2.VideoCapture("videoSamples/car_bridge.mp4")
     #  capture = cv2.VideoCapture(0) webcam
-    capture = cv2.VideoCapture("http://192.168.178.34:8080/video")
+    #  capture = cv2.VideoCapture("http://192.168.178.34:8080/video")
+    #  capture = cv2.VideoCapture("videoSamples/Nbg_Nikon_lowGraphics_main.mp4")
+    #  capture = cv2.VideoCapture("videoSamples/Sample_1.avi")
+
 
     objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=400, detectShadows=True)
     tracker = EuclideanDistTracker()
@@ -55,7 +58,7 @@ def track_vehicle(mask, regionOfInterest, tracker):
     detections = []
     for cnt in contours:
         area = cv2.contourArea(cnt)
-        if area > 1000:
+        if area > 10000:
             (x, y, w, h) = cv2.boundingRect(cnt)
             detections.append([x, y, w, h])
 
