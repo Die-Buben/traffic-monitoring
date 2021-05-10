@@ -58,8 +58,8 @@ while True:
 
     #cv2.imshow("Frame", frame)
     cv2.imshow("Mask", mask)
-    #cv2.imshow("RegionofInterest", regionOfInterest)
-    #cv2.imshow("hh", drawing_convex)
+    cv2.imshow("RegionofInterest", regionOfInterest)
+    cv2.imshow("hh", drawing_convex)
 
     key = cv2.waitKey(30)
     if key == 27:
