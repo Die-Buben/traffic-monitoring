@@ -29,7 +29,9 @@ class Userinterface(tk.Frame):
 
     def update_car_amount(self, car_amount="HA"):
         self.display.configure(text=car_amount)
+        self.display.pack()
 
     def start_monitoring(self):
-        monit = VideoProcessing.VideoProcessing("videoSamples/car_bridge.mp4")
+        #  monit = VideoProcessing.VideoProcessing("videoSamples/car_bridge.mp4")
+        monit = VideoProcessing.VideoProcessing("http://192.168.178.34:8080/video")
         monit.setup()
