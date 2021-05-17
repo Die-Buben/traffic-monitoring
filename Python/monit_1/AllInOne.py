@@ -5,7 +5,7 @@ import cv2
 from EuclideanDistanceTracker import EuclideanDistTracker
 
 
-class AllInOne():
+class AllInOne:
     def __init__(self, source_path="videoSamples/car_bridge.mp4"):
         self.app = Flask(__name__)
         self.__source_path = source_path
@@ -42,8 +42,8 @@ class AllInOne():
             self.__pre_processing()
             self.__track_vehicle()
 
-            # cv2.imshow("Traffic Detection", self.__region_of_interest)
-            # cv2.imshow("Mask after preprocessing", self.__mask)
+            cv2.imshow("Traffic Detection", self.__region_of_interest)
+            cv2.imshow("Mask after preprocessing", self.__mask)
 
             _, buffer = cv2.imencode('.jpg', self.__region_of_interest)
             self.__region_of_interest = buffer.tobytes()
@@ -104,4 +104,4 @@ class AllInOne():
         def settings():
             return "Settings"
 
-        app.run("192.168.178.131", debug=True)
+        app.run()#"192.168.178.131", debug=True)
