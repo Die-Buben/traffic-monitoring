@@ -3,18 +3,17 @@ import numpy as np
 
 
 from EuclideanDistanceTracker import *
-from Userinterface import *
 
 
 def setup():
-    capture = cv2.VideoCapture("videoSamples/car_bridge.mp4")
+    #  capture = cv2.VideoCapture("videoSamples/car_bridge.mp4")
     #  capture = cv2.VideoCapture(0) webcam
     #  capture = cv2.VideoCapture("http://192.168.178.34:8080/video")
     #  capture = cv2.VideoCapture("videoSamples/Nbg_Nikon_lowGraphics_main.mp4")
-    #  capture = cv2.VideoCapture("videoSamples/Sample_1.avi")
+    capture = cv2.VideoCapture("videoSamples/Sample_1.avi")
 
 
-    objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=400, detectShadows=True)
+    objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=1000, detectShadows=True)
     tracker = EuclideanDistTracker()
     monitoring(objectDetector, capture, tracker)
 
@@ -43,8 +42,8 @@ def monitoring(objectDetector, capture, tracker):
 
 
 def pre_processing(mask):
-    kernel = np.ones((5, 5), np.uint8)
-    dilated = cv2.dilate(mask, kernel, iterations=6)
+    kernel = np.ones((3, 3), np.uint8)
+    dilated = cv2.dilate(mask, kernel, iterations=3)
     contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     for i in range(len(contours)):
@@ -58,6 +57,8 @@ def track_vehicle(mask, regionOfInterest, tracker):
     detections = []
     for cnt in contours:
         area = cv2.contourArea(cnt)
+
+        # Specify the needed area to be detected as an object
         if area > 10000:
             (x, y, w, h) = cv2.boundingRect(cnt)
             detections.append([x, y, w, h])
