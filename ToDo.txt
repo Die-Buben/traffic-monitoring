@@ -1,11 +1,1 @@
-UserInterface verbessern
-	Autos ingesamt
-	LKW, Auto, Motorrad
-
-Farben der Fahrzeuge erkennen
-
-Richtung des Fahrzeugs erkennen
-
-Videos über Userinterface wechseln
-
-Branches für jedes Thema erstellen.
+Morphologischer Operationen -> Dilatation und Erosion
