@@ -5,10 +5,12 @@ from EuclideanDistanceTracker import *
 
 
 def setup():
-    #  capture = cv2.VideoCapture("videoSamples/car_bridge.mp4") # Another video, threshold should be adapted
-    capture = cv2.VideoCapture("videoSamples/Sample_1.avi")
+    capture = cv2.VideoCapture("videoSamples/car_bridge.mp4") # Another video, threshold should be adapted
+    #  capture = cv2.VideoCapture("videoSamples/Sample_1.avi")
 
-    objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=1000, detectShadows=True)
+    objectDetector = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=400, detectShadows=True)
+    # Sample_1 parameters= history=500, varThreshold=1000, detectShadows=True
+    # car_bridge parameters= history=500, varThreshold=400, detectShadows=True
     tracker = EuclideanDistTracker()
     monitoring(objectDetector, capture, tracker)
 
@@ -37,8 +39,10 @@ def monitoring(objectDetector, capture, tracker):
 
 
 def pre_processing(mask):
-    kernel = np.ones((3, 3), np.uint8)
-    dilated = cv2.dilate(mask, kernel, iterations=3)
+    # Sample_1 parameters= kernel 3, 3; iterations=3
+    # car_bridge parameters= kernel 5, 5; iterations=6
+    kernel = np.ones((5, 5), np.uint8)
+    dilated = cv2.dilate(mask, kernel, iterations=6)
     contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     for i in range(len(contours)):
